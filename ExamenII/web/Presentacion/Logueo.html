@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Login</title>
+        <link href="/ExamenII/css/style.css" rel="stylesheet" type="text/css" />
+         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/alertifyjs@1.11.0/build/css/alertify.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.11.0/build/alertify.min.js"></script>
+    </head>
+    <body id="cuerpo">
+       <div ><center><img id="inicio" src="/ExamenII/Imagenes/gmail.png" width="70" height="70"></center></div>
+       <div class="Div_input" >
+           <input id='correo' class="input_form" type="text" placeholder="correo"><br>
+           <input id='clave' class="input_form" type="password" placeholder="clave"><br><br>
+           <input id='Enviar' type="button" class="Button_inicio" value="Inicio Sesion">
+       </div>
+       <script>
+        function Load()
+        {
+            
+            $("#Enviar").on("click",()=>{Inicio_Sesion();});
+        }
+        function Inicio_Sesion()
+        {
+            usuario={
+                correo: $("#correo").val(),
+                clave: $("#clave").val()   
+            }
+            $.ajax({type: "POST", url:"/ExamenII/api/Logueo",data: JSON.stringify(usuario),contentType: "application/json"})
+      .then( (user)=>{ 
+              if(user)
+              {     window.location.assign("/ExamenII/Presentacion/PanelCorreo.html");}
+              else
+              {
+                   alertify.notify("Correo o Clave incorrecta",'error',5, null);
+              }
+        },(error)=>{ alert(errorMessage(error.status));}); 
+        }
+         function errorMessage(status){
+        switch(status){
+            case 404: return "Registro no encontrado";
+            case 403: case 405: return "Usuario no autorizado";
+            case 406: return "Registro duplicado";
+            default: return "Error: " + status;
+        }
+       }
+        Load();
+       </script>
+    </body>
+</html>

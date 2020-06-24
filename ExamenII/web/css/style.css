@@ -1,0 +1,206 @@
+#cuerpo
+{
+ /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#21b4ce+1,cc6e1c+88,57a895+100 */
+background: #21b4ce; /* Old browsers */
+background: -moz-linear-gradient(top,  #21b4ce 1%, #cc6e1c 88%, #57a895 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top,  #21b4ce 1%,#cc6e1c 88%,#57a895 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom,  #21b4ce 1%,#cc6e1c 88%,#57a895 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#21b4ce', endColorstr='#57a895',GradientType=0 ); /* IE6-9 */
+
+    width: 1000px;
+    height: 1000px;
+    
+}
+#inicio
+{
+    
+    padding-top: 180px;
+    margin-left: 250px;
+}
+.Div_input
+{
+  
+   margin-left: 490px; 
+}
+.input_form{
+
+    width: 50%;
+    border: 2px solid #298089;
+    padding: .5rem;
+    font-size:15px;
+    border-radius: 5px;
+    
+}
+.input_mensaje{
+   
+    width: 80%;
+    height: 100px;
+    border: 2px solid #298089;
+    padding: .5rem;
+    font-size:15px;
+    border-radius: 5px;
+    
+    
+}
+.Button_inicio
+{
+    background: turquoise;
+    color: white;
+    width: 54%;
+
+     font-size:20px;
+}
+.Button_nuevo_mensaje
+{
+    background: turquoise;
+    color: white;
+    width: 80%;
+
+     font-size:20px;
+}
+.Contenedor{
+    
+
+       overflow:hidden;
+}
+.Opciones
+{
+ /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#21b4ce+1,cc6e1c+88,57a895+100 */
+background: #21b4ce; /* Old browsers */
+background: -moz-linear-gradient(top,  #21b4ce 1%, #cc6e1c 88%, #57a895 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top,  #21b4ce 1%,#cc6e1c 88%,#57a895 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom,  #21b4ce 1%,#cc6e1c 88%,#57a895 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#21b4ce', endColorstr='#57a895',GradientType=0 ); /* IE6-9 */
+color: white;    
+height: 1000px;
+    width: 200px;
+    float:left;
+}
+.Correos
+{
+
+color: black;    
+height: 1000px;
+    width: 350px;
+    float:left;
+}
+th, td {
+  padding: 4px;
+  text-align: left;
+  border-bottom: 1px solid black;
+}
+.ventana{
+    background: white;
+    width: 50%;
+    height:60%;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    text-align: left;
+    padding: 20px;
+    min-height: 250px;
+    border-radius: 23px;
+    position: absolute;
+    left:31%;
+        top: 10%;
+        display:none;
+}
+#cerrar{
+    position: absolute;
+    right:3px;
+    top: 1px;
+    
+}
+.Contactos
+{
+margin-left: 600px;
+color: black;    
+height: 1000px;
+    width: 1000px;
+    float:left;
+}
+.Mensaje
+{
+
+color: black;    
+height: 1000px;
+    width: 500px;
+    float:left;
+}
+li>a{
+   color:white;
+   text-decoration: none;
+   display: block;
+   padding: 12px 26px;
+   font-family: "Oswald";
+   font-size: 14px;
+}
+ul{
+   list-style: none;
+   margin: 0;
+   padding: 0;
+    
+    
+}
+#Menu a:hover{
+    color: rgba(255,153,0,1);
+    background: rgba(0,0,0,0.2);
+    animation: 1s ms 1;
+}
+.Nav>li{
+    
+ float: right;   
+    
+}
+.div_correo{
+    width: 340px;
+}
+#Menu{
+ /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#21b4ce+42,57a895+100 */
+background: #21b4ce; /* Old browsers */
+background: -moz-linear-gradient(top,  #21b4ce 42%, #57a895 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top,  #21b4ce 42%,#57a895 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom,  #21b4ce 42%,#57a895 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#21b4ce', endColorstr='#57a895',GradientType=0 ); /* IE6-9 */
+
+    width: 1263px;
+    height: 52px;
+    
+    
+}
+input:checked ~ .switch_order {
+    
+    background: #298089;
+}
+input:checked ~ .correo {
+    
+    background: beige;
+}
+.Display_none
+{
+    
+    display: none;
+}
+.switch_order{
+   
+    padding: 5px;
+    width: auto;
+    color: white;
+    font-size: 20px;
+    cursor:pointer;
+    
+   
+    
+}
+.correo{
+   
+    padding: 5px;
+    width: 350px;
+   
+    color: black;
+    font-size: 20px;
+    cursor:pointer;
+    line-height: 1.5em;
+   word-wrap: break-word;
+    
+}

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Bandeja de entrada</title>
+           <link href="/ExamenII/css/style.css" rel="stylesheet" type="text/css" />
+         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+          <link href="https://cdn.jsdelivr.net/npm/alertifyjs@1.11.0/build/css/alertify.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.11.0/build/alertify.min.js"></script>
+    </head>
+    <body>
+            <div class="ventana" id="vent">
+        
+        <div id="cerrar"><img src="/ExamenII/Imagenes/close.png"></div>
+        <div class="Contenedor_plato"  id="Cuerpo_ventana"></div>
+       <p>Debe de ingresar o seleccionar un correo,luego debe darle click al boton verde, para que se anada en destinarios</p>
+            <p>Para:</p>
+        <input id="anadir_destinario" type="text" class="input_form" list="Listcontactos"><img id='anadir_correo' src='/ExamenII/Imagenes/plus.png' width='30' height='30'>
+        <datalist id="Listcontactos"></datalist>
+        <p>Destinarios:</p>
+        <select class="input_form" id="contactos_destinarios"></select><img id='eleminar_correo' src='/ExamenII/Imagenes/eliminar.png' width='30' height='30'>
+        <p>Asunto:</p>
+        <input type="text" id="Asunto" class="input_form">
+        <p>Mensaje:</p>
+        <textarea class="input_mensaje" id="vent_mensaje"></textarea><br><br>
+        <input class="Button_nuevo_mensaje" type="button" id="Enviar_correo" value="Enviar">
+        </div>
+           <nav id="Menu"> 
+            <ul class='Nav'> 
+                <li >
+                 <a id="Salir" href="/ExamenII/Presentacion/Logueo.html">Salir</a>
+                  <ul>  <!--submenu --> </ul>
+                </li>
+                <li class="Barra"> | </li>
+                 <li >
+                 <a id="correomenu" href="/ExamenII/Presentacion/PanelCorreo.html"></a>
+                  <ul>  <!--submenu --> </ul>
+                </li>
+                <li class="Barra"> | </li>
+                 <li >
+                 <a id="contactoslink" href="#">Contactos</a>
+                  <ul>  <!--submenu --> </ul>
+                </li>
+            </ul></nav>
+        <div id="contenedor" class="Contenedor">
+            <div class="Opciones">
+               <center><input id='NuevoMensaje' type="button" class="Button_nuevo_mensaje" value="Nuevo Mensaje"></center><br><br>
+             <div >
+                <input  class="Display_none" type="radio" name="acordeon" id="c2">
+                <label class="switch_order" for="c2">Bandeja Entrada</label><br>
+                </div><br>
+                <div >
+                <input class="Display_none" type="radio" name="acordeon" id="c3">
+                <label class="switch_order" for="c3">Enviados</label><br>
+                </div>
+             </div>
+             <div id="correos" class="Correos">
+               
+             </div> 
+             <div id="Mensaje" class="Mensaje">
+               
+             </div> 
+        </div>
+        
+        
+        
+        
+        <script>
+             var destinarios = new Array();
+            var Code_mensaje;
+            function Load()
+            {
+                $("#NuevoMensaje").on("click",()=>{AbrirVentana();});
+                $("#cerrar").on("click",()=>{cerrar();});
+                  $("#Salir").on("click",()=>{Cerrar_sesion();});
+                UserGet();
+                $("#c2").on("click",()=>{CorreosGet();});
+                 $("#c3").on("click",()=>{CorreosEnviadosGet();});
+                $("#contactoslink").on("click",()=>{ContactosGet();});
+                $("#c2").click();
+                $("#anadir_correo").on("click",()=>{VerificarCorreo();});
+                $("#eleminar_correo").on("click",()=>{EliminarDestinario();});
+                $("#Enviar_correo").on("click",()=>{EnviarCorreo();});
+                
+            }
+            function UserGet()
+            {
+                $.ajax({type: "GET", url:"/ExamenII/api/Logueo",contentType: "application/json"})
+                 .then( (user)=>{ $("#correomenu").html(user.correo); },(error)=>{ alert(errorMessage(error.status));}); 
+                
+            }
+            function CorreosGet()
+            {
+                
+                 $.ajax({type: "GET", url:"/ExamenII/api/Correos",contentType: "application/json"})
+                 .then( (correos)=>{ ShowCorreos(correos); },(error)=>{ alert(errorMessage(error.status));}); 
+            }
+            function Cerrar_sesion()
+            {
+                
+                 $.ajax({type: "DELETE", url:"/ExamenII/api/Logueo",contentType: "application/json"})
+                 .then( ()=>{  },(error)=>{ alert(errorMessage(error.status));}); 
+            }
+            function ShowCorreos(correos)
+            {
+              $("#Mensaje").html("");
+                $("#correos").html("");
+                 $("#correos").html("<div><img id='eliminar' src='/ExamenII/Imagenes/delete.png' width='20' height='20'></div>");
+                $("#eliminar").on("click",()=>{EliminarCorreos();});
+                correos.forEach((c)=>{
+                    
+                $("#correos").append(  
+                "<div class='div_correo'><input type='checkbox' name='acordeon' id='"+c.codigo+"'>"+
+               " <label class='correo' for='"+c.codigo+"'>"+c.hora+"        "+c.origen.correo+"<br>"+
+               c.mensaje+"</label></div><br>" );
+                 $("#"+c.codigo).on("click",()=>{ShowMensaje(c);});   
+                });
+                
+            }
+              function CorreosEnviadosGet()
+            {
+                
+                 $.ajax({type: "GET", url:"/ExamenII/api/AddCorreo",contentType: "application/json"})
+                 .then( (correos)=>{ ShowCorreosEnviados(correos); },(error)=>{ alert(errorMessage(error.status));}); 
+            }
+            function ShowCorreosEnviados(correos)
+            {
+              $("#Mensaje").html("");
+                $("#correos").html("");
+            
+                correos.forEach((c)=>{
+                    
+                $("#correos").append(  
+                "<div class='div_correo'><input type='checkbox' name='acordeon' id='"+c.codigo+"'>"+
+               " <label class='correo' for='"+c.codigo+"'>"+c.hora+"        "+c.destino.correo+"<br>"+
+               c.mensaje+"</label></div><br>" );
+                 $("#"+c.codigo).on("click",()=>{ShowMensajeDestino(c);});   
+                });
+                
+            }
+            function ShowMensajeDestino(mensaje)
+            {
+                Code_mensaje = mensaje.codigo;
+                $("#Mensaje").html(
+                "<p>Correo origen:</p><input class='input_form' type='text' value='"+mensaje.origen.correo+"' disabled>"+
+                "<p>Correo destino:</p><input class='input_form' type='text' value='"+mensaje.destino.correo+"' disabled><img id='anadir' src='/ExamenII/Imagenes/anadir.png' width='30' height='30'>"+
+                "<p>Asunto:</p><input class='input_form' type='text' value='"+mensaje.asunto+"' disabled>"+
+                "<p>Mensaje:</p><textarea class='input_mensaje' disabled>"+mensaje.mensaje+"</textarea>"
+                );
+                $("#anadir").on("click",()=>{AddContacto(mensaje.destino);});
+            }
+            function ShowMensaje(mensaje)
+            {
+                Code_mensaje = mensaje.codigo;
+                $("#Mensaje").html(
+                "<p>Correo origen:</p><input class='input_form' type='text' value='"+mensaje.origen.correo+"' disabled><img id='anadir' src='/ExamenII/Imagenes/anadir.png' width='30' height='30'>"+
+                "<p>Correo destino:</p><input class='input_form' type='text' value='"+mensaje.destino.correo+"' disabled>"+
+                "<p>Asunto:</p><input class='input_form' type='text' value='"+mensaje.asunto+"' disabled>"+
+                "<p>Mensaje:</p><textarea class='input_mensaje' disabled>"+mensaje.mensaje+"</textarea>"
+                );
+                $("#anadir").on("click",()=>{AddContacto(mensaje.origen);});
+            }
+             function cerrar(){
+            document.getElementById("vent").style.display="none";
+      
+           }
+           function AbrirVentana(){
+               $("#anadir_destinario").val("");
+               $("#Listcontactos").html("");
+               $("#contactos_destinarios").html("");
+               $("#Asunto").val("");
+               $("#vent_mensaje").val("");
+                destinarios.length=0;
+                ContactosGetventana();
+                document.getElementById("vent").style.display="block";
+             }
+            function EliminarCorreos()
+            {
+                   var correosdelete = new Array();
+                 $("#correos").find("input:checked").each(function () {
+                     if(Code_mensaje==$(this).attr('id'))
+                     {
+                      $("#Mensaje").html("");   
+                     }
+                     var correo = {codigo: $(this).attr('id')}
+                     correosdelete.push(correo);
+                 });
+                  $.ajax({type: "POST", url:"/ExamenII/api/Correos",data: JSON.stringify(correosdelete),contentType: "application/json"})
+                .then( (correos)=>{ShowCorreos(correos); },(error)=>{ alert(errorMessage(error.status));});
+                
+            }
+            function EnviarCorreo()
+            {
+                if(destinarios.length!=0)
+                {correo={
+                    usuarios: destinarios,
+                    correo: {
+                        asunto:$("#Asunto").val(),
+                        mensaje:$("#vent_mensaje").val()
+                        
+                    }
+                    
+                }
+                console.log(correo);
+                 $.ajax({type: "POST", url:"/ExamenII/api/AddCorreo",data: JSON.stringify(correo),contentType: "application/json"})
+                .then( ()=>{cerrar();  $("#c2").click();alertify.notify("Se envio el correo correctamente",'success',5, null); },(error)=>{ alert(errorMessage(error.status));});
+                
+                }
+                else
+                {
+                    alertify.notify("No hay destinarios seleccionados o ingresados",'error',5, null);
+                }
+            }
+            function VerificarCorreo()
+            {
+               
+                  $.ajax({type: "GET", url:"/ExamenII/api/Correos/"+$("#anadir_destinario").val(),contentType: "application/json"})
+                .then( (valido)=>{ShowDestinarios(valido); },(error)=>{ alert(errorMessage(error.status));});
+                
+            }
+            function ShowDestinarios(valido)
+            {
+                if(valido)
+                {
+             
+                    var usuario={correo:$("#anadir_destinario").val()}
+                    
+                     destinarios.push(usuario);
+                     var value=destinarios.length-1;
+                    $("#contactos_destinarios").append("<option value='"+value+"'>"+$("#anadir_destinario").val()+"</option>");
+                    $("#anadir_destinario").val("");
+                }
+                else
+                {
+                    $("#anadir_destinario").val("");
+                    alertify.notify("Correo no existe",'error',5, null);
+                }
+                
+            }
+            function EliminarDestinario()
+            {   
+                var posi = $("#contactos_destinarios").val();
+                console.log(posi);
+                $("#contactos_destinarios").html("");
+                if(destinarios.length!=0)
+                {destinarios.splice(posi, 1 );
+                    
+                    var contador=0;
+                destinarios.forEach((d)=>{
+                     
+                    $("#contactos_destinarios").append("<option value='"+contador+"'>"+d.correo+"</option>");
+                    contador=contador+1;
+                });
+                }
+                
+            }
+            function AddContacto(Contacto)
+            {
+               
+                  $.ajax({type: "POST", url:"/ExamenII/api/Contactos",data: JSON.stringify(Contacto),contentType: "application/json"})
+                .then( ()=>{alertify.notify("Se registro correctamente",'success',5, null); },(error)=>{ alert(errorMessage(error.status));});
+                
+            }
+            function ContactosGet()
+            {
+                $.ajax({type: "GET", url:"/ExamenII/api/Contactos",contentType: "application/json"})
+                .then( (contactos)=>{ShowContactos(contactos); },(error)=>{ alert(errorMessage(error.status));}); 
+            }
+            function ContactosGetventana()
+            {
+                $.ajax({type: "GET", url:"/ExamenII/api/Contactos",contentType: "application/json"})
+                .then( (contactos)=>{ShowContactosVentana(contactos); },(error)=>{ alert(errorMessage(error.status));}); 
+            }
+            function ShowContactosVentana(contactos)
+            {
+                contactos.forEach((c)=>{     
+                
+                $("#Listcontactos").append("<option value='"+c.correo+"'>"+c.correo+"</opcion>");
+                });
+                
+                
+            }
+            function ShowContactos(contactos)
+            {
+                
+               $("#contenedor").html("<div class='Contactos'><h3>Contactos</h3><table><thead>"+
+              "<tr><td>Nombre</td> <td>Correo</td></tr>"+
+            "</thead><tbody id='listadocontactos'></tbody></table></div>"); 
+            var listadocontactos=$("#listadocontactos");
+            if(contactos!=null)
+            {
+                contactos.forEach((c)=>{listadocontactos.append("<tr><td>"+c.nombre+"</td><td>"+c.correo+"</td></tr>");} );
+            }
+                
+                
+            }
+            Load();
+        </script>
+    </body>
+</html>
